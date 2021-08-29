@@ -1,4 +1,4 @@
-const { check } = require("express-validator");
+const { check, query } = require("express-validator");
 
 const emailValidator = check("email")
   .notEmpty()
@@ -14,7 +14,19 @@ const passwordValidator = check("password")
   .isLength({ min: 8 })
   .withMessage("Password must be atleast 8 characters");
 
+// const pageValidator = check
+//   .query("page")
+//   .isNumber()
+//   .withMessage("Page must be a number");
+
+// const pageSizeValidator = check
+//   .query("size")
+//   .isNumber()
+//   .withMessage("Page size must be a number");
+
 module.exports = {
   emailValidator,
   passwordValidator,
+  // pageValidator,
+  // pageSizeValidator,
 };

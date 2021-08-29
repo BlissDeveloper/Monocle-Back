@@ -1,6 +1,8 @@
 module.exports = class User {
-    email = ''
-    constructor(email) {
-        this.email = email
-    }
-}
+  email = "";
+  id = "";
+  // name = ''
+  constructor(email) {
+    this.email = email;
+  }
+};
