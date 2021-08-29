@@ -1,31 +1,11 @@
 const auth = require("../firebase/auth");
-const { check } = require("express-validator");
 const Status = require("../constants/status");
 const ErrorUtils = require("../utils/error-utils");
+const Validator = require("../validator");
 
-const validateSignIn = [
-  check("email")
-    .notEmpty()
-    .withMessage("Email is required.")
-    .bail()
-    .isEmail()
-    .withMessage("Invalid email format."),
-  check("password")
-    .notEmpty()
-    .withMessage("Password is required")
-    .bail()
-    .isLength({ min: 8 })
-    .withMessage("Password must be atleast 8 characters"),
-];
+const validateSignIn = [Validator.emailValidator, Validator.passwordValidator];
 
-const validateForgotPass = [
-  check("email")
-    .notEmpty()
-    .withMessage("Email is required.")
-    .bail()
-    .isEmail()
-    .withMessage("Invalid email format."),
-];
+const validateForgotPass = [Validator.emailValidator];
 
 const signIn = async (req, res) => {
   const errorMsgs = ErrorUtils.handleErrors(req);

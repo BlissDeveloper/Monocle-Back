@@ -10,6 +10,7 @@ const signIn = (email, password) => {
   return axios.post(path, {
     email: email,
     password: password,
+    returnSecureToken: true,
   });
 };
 
@@ -24,7 +25,18 @@ const forgotPass = (email) => {
   });
 };
 
+const signUp = (email, password) => {
+  //accounts:signUp?key=[API_KEY]
+  const path = "/accounts:signUp?key=" + API_KEY;
+  return axios.post(path, {
+    email: email,
+    password: password,
+    returnSecureToken: true,
+  });
+};
+
 module.exports = {
   signIn,
   forgotPass,
+  signUp,
 };
