@@ -1,7 +1,7 @@
 const auth = require("../firebase/auth");
 const { check } = require("express-validator");
-const { validationResult } = require("express-validator");
 const Status = require("../constants/status");
+const ErrorUtils = require("../utils/error-utils");
 
 const validateSignIn = [
   check("email")
@@ -18,17 +18,22 @@ const validateSignIn = [
     .withMessage("Password must be atleast 8 characters"),
 ];
 
+const validateForgotPass = [
+  check("email")
+    .notEmpty()
+    .withMessage("Email is required.")
+    .bail()
+    .isEmail()
+    .withMessage("Invalid email format."),
+];
+
 const signIn = async (req, res) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    const errorMessages = [];
-    result.errors.map((error) => {
-      errorMessages.push(error.msg);
-    });
+  const errorMsgs = ErrorUtils.handleErrors(req);
+  if (errorMsgs.length > 0) {
     res.status(422).json({
       status: Status.FAILED,
       data: {
-        message: errorMessages,
+        message: errorMsgs,
       },
     });
   } else {
@@ -57,7 +62,42 @@ const signIn = async (req, res) => {
   }
 };
 
+const forgotPass = async (req, res) => {
+  const errorMessages = ErrorUtils.handleErrors(req);
+  if (errorMessages.length > 0) {
+    res.status(422).json({
+      status: Status.FAILED,
+      data: {
+        message: errorMessages,
+      },
+    });
+  } else {
+    try {
+      await auth.forgotPass(req.body.email);
+      res.status(200).json({
+        status: Status.SUCCESS,
+        data: {
+          message: "We have sent a request password to your email.",
+        },
+      });
+    } catch (error) {
+      res.status(422).json({
+        status: Status.FAILED,
+        data: {
+          message: [
+            error.response.data.error.message
+              ? error.response.data.error.message
+              : "An unkown error has occurred. Please try again",
+          ],
+        },
+      });
+    }
+  }
+};
+
 module.exports = {
   signIn,
+  forgotPass,
   validateSignIn,
+  validateForgotPass,
 };
