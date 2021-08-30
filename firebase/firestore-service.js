@@ -11,11 +11,26 @@ const addUser = async (user) => {
   return ref.set(JSON.parse(JSON.stringify(user)));
 };
 
-const getUsers = async (page, size) => {
-  if (page && size) {
-    console.log("Page and size is not null");
+const getUsers = async (query, size) => {
+  if (size) {
+    let nextQueryId = null;
+    let next = null;
+    if (!query) {
+      next = cols.users.orderBy("queryId").limit(parseInt(size));
+    } else {
+      next = cols.users
+        .orderBy("queryId")
+        .startAfter(query)
+        .limit(parseInt(size));
+    }
+    const nextQuery = await next.get();
+    const len = nextQuery.docs.length - 1;
+    if (!nextQuery.empty) {
+      nextQueryId = nextQuery.docs[len].data().queryId;
+    }
+    return [nextQueryId, next.get()];
   } else {
-    return cols.users.get();
+    return [null, cols.users.get()];
   }
 };
 

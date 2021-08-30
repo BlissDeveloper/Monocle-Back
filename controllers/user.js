@@ -23,7 +23,7 @@ const addUser = async (req, res) => {
   } else {
     try {
       const response = await auth.signUp(req.body.email, req.body.password);
-      await dbService.addUser(new User(req.body.email));
+      await dbService.addUser(new User(req.body.email, response.data.localId));
       res.status(200).json({
         status: Status.SUCCESS,
         data: {
@@ -47,30 +47,29 @@ const addUser = async (req, res) => {
 };
 
 const getUsersList = async (req, res) => {
-  // const errors = ErrorUtils.handleErrors(req);
-  // if (errors.length > 0) {
-  //   res.status(422).json({
-  //     status: Status.FAILED,
-  //     data: {
-  //       message: errors,
-  //     },
-  //   });
-  // } else {
-
-  // }
   try {
-    const page = req.query.page;
-    const size = req.query.size;
-    const snapshot = await dbService.getUsers(page, size);
+    const query = req.query.query;
+    const pageSize = req.query.size;
+    const arrayResults = await dbService.getUsers(query, pageSize);
+    const nextQuery = arrayResults[0];
+    const snapshot = await arrayResults[1];
     const users = [];
     snapshot.forEach((doc) => {
-      users.push(doc.data());
+      if (typeof doc.data() !== "undefined" || doc.data()) {
+        const user = doc.data();
+        delete user.queryId;
+        users.push(user);
+      }
     });
     res.status(200).json({
       status: Status.SUCCESS,
-      data: users,
+      data: {
+        query: nextQuery,
+        users: users,
+      },
     });
   } catch (error) {
+    console.log(error);
     res.status(422).json({
       status: Status.FAILED,
       data: {
