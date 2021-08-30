@@ -5,4 +5,10 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-module.exports = admin.firestore();
+const firestore = admin.firestore();
+const storage = admin.storage();
+
+module.exports = {
+  firestore,
+  storage,
+};

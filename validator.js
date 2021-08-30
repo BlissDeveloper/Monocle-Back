@@ -14,19 +14,38 @@ const passwordValidator = check("password")
   .isLength({ min: 8 })
   .withMessage("Password must be atleast 8 characters");
 
-// const pageValidator = check
-//   .query("page")
-//   .isNumber()
-//   .withMessage("Page must be a number");
+const searchValidator = query("query")
+  .notEmpty()
+  .withMessage("Search query is required.");
 
-// const pageSizeValidator = check
-//   .query("size")
-//   .isNumber()
-//   .withMessage("Page size must be a number");
+const landmarkNameValidator = check("name")
+  .notEmpty()
+  .withMessage("Name is required.");
+
+const latValidator = check("lat")
+  .notEmpty()
+  .withMessage("Latitude is required.")
+  .bail()
+  .isNumeric()
+  .withMessage("Invalid latitude.");
+
+const longValidator = check("lng")
+  .notEmpty()
+  .withMessage("Longitude is required.")
+  .bail()
+  .isNumeric()
+  .withMessage("Invalid Longitude.");
+
+const addressValidator = check("address")
+  .notEmpty()
+  .withMessage("Address is required.");
 
 module.exports = {
   emailValidator,
   passwordValidator,
-  // pageValidator,
-  // pageSizeValidator,
+  searchValidator,
+  landmarkNameValidator,
+  latValidator,
+  longValidator,
+  addressValidator,
 };

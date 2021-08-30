@@ -1,9 +1,9 @@
-const axios = require("axios");
 require("dotenv").config();
 
-axios.defaults.baseURL = process.env.AUTH_BASE_URL;
-
+const BASE_URL = process.env.AUTH_BASE_URL;
 const API_KEY = process.env.API_KEY;
+
+const axios = require("axios").create({ baseURL: BASE_URL });
 
 const signIn = (email, password) => {
   const path = "/accounts:signInWithPassword?key=" + API_KEY;
@@ -27,6 +27,7 @@ const forgotPass = (email) => {
 
 const signUp = (email, password) => {
   //accounts:signUp?key=[API_KEY]
+  console.log(axios);
   const path = "/accounts:signUp?key=" + API_KEY;
   return axios.post(path, {
     email: email,

@@ -1,14 +1,12 @@
-const firestore = require("./db");
+const { firestore } = require("./db");
 
 const cols = {
   users: firestore.collection("users"),
+  landmarks: firestore.collection("landmarks"),
 };
 
 const addUser = async (user) => {
-  // return cols.users.doc().set(JSON.parse(JSON.stringify(user)));
-  const ref = cols.users.doc();
-  user.id = ref.id;
-  return ref.set(JSON.parse(JSON.stringify(user)));
+  return cols.users.doc().set(JSON.parse(JSON.stringify(user)));
 };
 
 const getUsers = async (query, size) => {
@@ -32,6 +30,10 @@ const getUsers = async (query, size) => {
   } else {
     return [null, cols.users.get()];
   }
+};
+
+const addLandmark = async (landmark) => {
+  return cols.landmarks.doc().set(JSON.parse(JSON.stringify(landmark)));
 };
 
 module.exports = {
