@@ -3,7 +3,8 @@ const app = express();
 const routes = require("./routes/routes");
 const fileupload = require("express-fileupload");
 
-const Status = "./constants/status.js";
+const Status = require("./constants/status.js");
+const AppError = require("./utils/appError");
 
 //Middlewares
 app.use(express.json());
@@ -19,10 +20,7 @@ app.use("/api/v1", routes);
 
 //404
 app.all("*", (req, res, next) => {
-  const err = new Error(`Cannot find ${req.originalUrl} on this server!`);
-  err.status = Status.FAILED;
-  err.statusCode = 404;
-  next(err);
+  next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));
 });
 
 //Error handler
