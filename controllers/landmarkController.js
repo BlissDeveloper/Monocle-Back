@@ -20,7 +20,6 @@ const search = catchErrors(async (req, res, next) => {
 });
 
 const addLandmark = catchErrors(async (req, res, next) => {
-  console.log(req);
   const landmark = new Landmark();
   landmark.name = req.body.name;
   landmark.lat = parseFloat(req.body.lat);

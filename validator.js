@@ -1,4 +1,19 @@
-const { check, query } = require("express-validator");
+const { check, query, body } = require("express-validator");
+const firestoreService = require("./firebase/firestore-service");
+
+const adminValidator = body("email")
+  .custom((val) => {
+    console.log(val);
+    return firestoreService.isAdmin(val).then((isAdmin) => {
+      console.log(isAdmin);
+      if (!isAdmin) {
+        return Promise.reject("");
+      } else {
+        return Promise.resolve();
+      }
+    });
+  })
+  .withMessage("You are not authorized to login.");
 
 const emailValidator = check("email")
   .notEmpty()
@@ -48,4 +63,5 @@ module.exports = {
   latValidator,
   longValidator,
   addressValidator,
+  adminValidator,
 };

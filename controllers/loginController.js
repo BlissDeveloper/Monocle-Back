@@ -1,17 +1,27 @@
 const auth = require("../firebase/auth");
+
+const User = require("../models/user");
+
 const Validator = require("../validator");
-
 const catchErrors = require("../utils/catchErrors");
+const Status = require("../constants/status");
 
-const validateSignIn = [Validator.emailValidator, Validator.passwordValidator];
+const validateSignIn = [
+  Validator.emailValidator,
+  Validator.passwordValidator,
+  Validator.adminValidator,
+];
 const validateForgotPass = [Validator.emailValidator];
 
 const signIn = catchErrors(async (req, res, next) => {
-  await auth.signIn(req.body.email, req.body.password);
+  const signInRes = await auth.signIn(req.body.email, req.body.password);
+  let admin = new User(req.body.email, signInRes.data.localId);
+  // let user = new User(req.body.email, signInRes.data.localId);
   res.status(200).json({
     status: Status.SUCCESS,
     data: {
-      email: email,
+      email: admin.email,
+      id: admin.id,
     },
   });
 });

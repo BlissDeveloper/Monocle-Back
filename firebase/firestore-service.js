@@ -1,12 +1,18 @@
 const { firestore } = require("./db");
-
+const catchErrors = require("../utils/catchErrors");
 const cols = {
   users: firestore.collection("users"),
   landmarks: firestore.collection("landmarks"),
+  admins: firestore.collection("admins"),
 };
 
 const addUser = async (user) => {
   return cols.users.doc().set(JSON.parse(JSON.stringify(user)));
+};
+
+const isAdmin = async (email) => {
+  const querySnapshot = await cols.admins.where("email", "==", email).get();
+  return querySnapshot.size > 0;
 };
 
 const getUsers = async (query, size) => {
@@ -39,5 +45,6 @@ const addLandmark = async (landmark) => {
 module.exports = {
   addUser,
   getUsers,
-  addLandmark
+  addLandmark,
+  isAdmin,
 };

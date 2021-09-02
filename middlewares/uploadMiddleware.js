@@ -5,7 +5,6 @@ const mimeType = require("mime-types");
 const sharp = require("sharp");
 
 const uploadFile = catchErrors(async (req, res, next) => {
-  console.log("uploadFile");
   if (req.files) {
     const files = req.files.file;
     if (files !== null || typeof files === "undefined") {
