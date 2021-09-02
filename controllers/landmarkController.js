@@ -1,6 +1,7 @@
 const service = require("../places/places-service");
 const firestoreService = require("../firebase/firestore-service");
 
+const Status = require("../constants/status");
 const Landmark = require("../models/landmark");
 
 const Validator = require("../validator");
@@ -14,36 +15,27 @@ const validateLandmark = [
   Validator.addressValidator,
 ];
 
-// const search = catchErrors(async (req, res) => {
-//   const errors = ErrorUtils.handleErrors(req);
-//   if (errors.length > 0) {
-//     throwUserError(errors, res);
-//   } else {
-//     const response = await service.search(req.query.search);
-//   }
-// });
-
-const addLandmark = catchErrors(async (req, res, next) => {
-  const landmark = {
-    name: req.body.name,
-    lat: req.body.lat,
-    lng: req.body.lng,
-    address: req.body.address,
-    desc: req.body.desc,
-  };
-  if (req.files.image) {
-  } else {
-    await addToFirestore(landmark);
-    res.status(200).json({
-      status: Status.SUCCESS,
-      data: {},
-    });
-  }
+const search = catchErrors(async (req, res, next) => {
+  const response = await service.search(req.query.search);
 });
 
-const addToFirestore = (landmark) => {
-  return firestoreService.addLandmark(landmark);
-};
+const addLandmark = catchErrors(async (req, res, next) => {
+  console.log(req);
+  const landmark = new Landmark();
+  landmark.name = req.body.name;
+  landmark.lat = parseFloat(req.body.lat);
+  landmark.lng = parseFloat(req.body.lng);
+  landmark.address = req.body.address;
+  landmark.desc = req.body.desc;
+  landmark.images = req.body.images;
+  await firestoreService.addLandmark(landmark);
+  res.status(200).json({
+    status: Status.SUCCESS,
+    data: {
+      landmark: landmark,
+    },
+  });
+});
 
 module.exports = {
   validateSearch,

@@ -39,4 +39,5 @@ const addLandmark = async (landmark) => {
 module.exports = {
   addUser,
   getUsers,
+  addLandmark
 };
