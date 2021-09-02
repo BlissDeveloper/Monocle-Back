@@ -5,7 +5,6 @@ const AppError = require("./appError");
 module.exports = catchErrors = (fn) => {
   return (req, res, next) => {
     const errorMessages = errorUtils.handleErrors(req);
-    console.log(errorMessages);
     if (errorMessages.length > 0) {
       next(new AppError(errorMessages.join(","), 400));
     } else {

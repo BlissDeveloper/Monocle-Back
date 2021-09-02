@@ -1,7 +1,7 @@
 const { check, query, body } = require("express-validator");
 const firestoreService = require("./firebase/firestore-service");
 
-const adminValidator = body("email")
+const adminValidator = check("email")
   .custom((val) => {
     console.log(val);
     return firestoreService.isAdmin(val).then((isAdmin) => {
@@ -13,7 +13,8 @@ const adminValidator = body("email")
       }
     });
   })
-  .withMessage("You are not authorized to login.");
+  .withMessage("You are not authorized to login.")
+  .bail();
 
 const emailValidator = check("email")
   .notEmpty()

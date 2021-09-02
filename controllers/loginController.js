@@ -9,12 +9,14 @@ const Status = require("../constants/status");
 const validateSignIn = [
   Validator.emailValidator,
   Validator.passwordValidator,
-  Validator.adminValidator,
+  // Validator.adminValidator,
 ];
 const validateForgotPass = [Validator.emailValidator];
 
 const signIn = catchErrors(async (req, res, next) => {
+  console.log("signIn:");
   const signInRes = await auth.signIn(req.body.email, req.body.password);
+  console.log("Hello");
   let admin = new User(req.body.email, signInRes.data.localId);
   // let user = new User(req.body.email, signInRes.data.localId);
   res.status(200).json({

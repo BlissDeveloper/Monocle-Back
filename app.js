@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const routes = require("./routes/routes");
 const fileupload = require("express-fileupload");
+const cors = require("cors");
 
 const globalErrorHandler = require("./controllers/errorController");
 const uploadMiddleware = require("./middlewares/uploadMiddleware");
@@ -10,14 +11,13 @@ const AppError = require("./utils/appError");
 
 //Middlewares
 app.use(express.json());
-app.use(
-  fileupload()
-);
-// {
-//   useTempFiles: true,
-//   tempFileDir: "/tmp/",
-// }
+app.use(fileupload());
 app.use(uploadMiddleware);
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 //Routes
 app.use("/api/v1", routes);

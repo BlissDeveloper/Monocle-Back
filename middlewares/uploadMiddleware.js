@@ -15,14 +15,11 @@ const uploadFile = catchErrors(async (req, res, next) => {
         req.body.images = images;
         next();
       } else {
-        //Multiple file upload
-        console.log("Multiple file");
       }
     } else {
       next();
     }
   } else {
-    console.log("req.files is null");
     next();
   }
 });
