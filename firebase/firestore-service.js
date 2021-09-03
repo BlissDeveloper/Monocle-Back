@@ -20,17 +20,17 @@ const getUsers = async (query, size) => {
     let nextQueryId = null;
     let next = null;
     if (!query) {
-      next = cols.users.orderBy("queryId").limit(parseInt(size));
+      next = cols.users.orderBy("id").limit(parseInt(size));
     } else {
       next = cols.users
-        .orderBy("queryId")
+        .orderBy("id")
         .startAfter(query)
         .limit(parseInt(size));
     }
     const nextQuery = await next.get();
     const len = nextQuery.docs.length - 1;
     if (!nextQuery.empty) {
-      nextQueryId = nextQuery.docs[len].data().queryId;
+      nextQueryId = nextQuery.docs[len].data().id;
     }
     return [nextQueryId, next.get()];
   } else {

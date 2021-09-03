@@ -3,6 +3,7 @@ const app = express();
 const routes = require("./routes/routes");
 const fileupload = require("express-fileupload");
 const cors = require("cors");
+const morgan = require("morgan");
 
 const globalErrorHandler = require("./controllers/errorController");
 const uploadMiddleware = require("./middlewares/uploadMiddleware");
@@ -10,6 +11,7 @@ const uploadMiddleware = require("./middlewares/uploadMiddleware");
 const AppError = require("./utils/appError");
 
 //Middlewares
+app.use(morgan("combined"));
 app.use(express.json());
 app.use(fileupload());
 app.use(uploadMiddleware);
