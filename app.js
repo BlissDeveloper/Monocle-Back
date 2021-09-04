@@ -13,8 +13,9 @@ const AppError = require("./utils/appError");
 //Middlewares
 app.use(morgan("combined"));
 app.use(express.json());
-app.use(fileupload());
+app.use(fileupload())
 app.use(uploadMiddleware);
+
 app.use(
   cors({
     origin: "*",

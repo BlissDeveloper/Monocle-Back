@@ -1,5 +1,6 @@
 const { check, query, body } = require("express-validator");
 const firestoreService = require("./firebase/firestore-service");
+const admin = require("./firebase/admin");
 
 const adminValidator = check("email")
   .custom((val) => {
@@ -15,6 +16,21 @@ const adminValidator = check("email")
   })
   .withMessage("You are not authorized to login.")
   .bail();
+
+const userIdValidator = check("userId")
+  .notEmpty()
+  .withMessage("userId is required")
+  .bail()
+  .custom((val) => {
+    return admin.checkUidExistence(val).then((userRecord) => {
+      if (userRecord !== null) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject("");
+      }
+    });
+  })
+  .withMessage("User ID does not exist.");
 
 const emailValidator = check("email")
   .notEmpty()
@@ -65,4 +81,5 @@ module.exports = {
   longValidator,
   addressValidator,
   adminValidator,
+  userIdValidator,
 };
