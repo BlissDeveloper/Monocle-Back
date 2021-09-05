@@ -15,14 +15,15 @@ const validateForgotPass = [Validator.emailValidator];
 
 const signIn = catchErrors(async (req, res, next) => {
   const signInRes = await auth.signIn(req.body.email, req.body.password);
-  let admin = new User(req.body.email, signInRes.data.localId);
   console.log(signInRes.data);
+  let admin = new User(req.body.email, signInRes.data.localId);
   res.status(200).json({
     status: Status.SUCCESS,
     data: {
       email: admin.email,
       id: admin.id,
       token: signInRes.data.idToken,
+      refreshToken: signInRes.data.refreshToken,
     },
   });
 });

@@ -4,6 +4,7 @@ const dbService = require("../firebase/firestore-service");
 const Status = require("../constants/status");
 const Validator = require("../validator");
 const User = require("../models/user");
+const catchErrors = require("../utils/catchErrors");
 
 const validateSignUp = [Validator.emailValidator, Validator.passwordValidator];
 
@@ -12,7 +13,7 @@ const validateUsersList = [
   Validator.pageSizeValidator,
 ];
 
-const addUser = async (req, res, next) => {
+const addUser = catchErrors(async (req, res, next) => {
   const response = await auth.signUp(req.body.email, req.body.password);
   await dbService.addUser(new User(req.body.email, response.data.localId));
   res.status(200).json({
@@ -25,7 +26,7 @@ const addUser = async (req, res, next) => {
       },
     },
   });
-};
+});
 
 const getUsersList = async (req, res, next) => {
   const arrayResults = await dbService.getUsers(req.query.query, req.query.size);

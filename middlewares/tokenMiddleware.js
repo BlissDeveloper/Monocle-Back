@@ -5,10 +5,10 @@ const admin = require("../firebase/admin");
 
 const verifyToken = catchErrors(async (req, res, next) => {
   if (!req.headers.authorization) {
-    next(new AppError("No credentials sent", 403));
+    next(new AppError("No credentials sent", 401));
   }
-  const token = req.headers.authorization;
-  await admin.verifyToken(token);
+  const token = req.headers.authorization.split("Bearer ")[1];
+  catchErrors(await admin.verifyToken(token));
   next();
 });
 
