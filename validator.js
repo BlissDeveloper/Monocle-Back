@@ -4,9 +4,9 @@ const admin = require("./firebase/admin");
 
 const adminValidator = check("email")
   .custom((val) => {
-    console.log(val);
+    
     return firestoreService.isAdmin(val).then((isAdmin) => {
-      console.log(isAdmin);
+      
       if (!isAdmin) {
         return Promise.reject("");
       } else {

@@ -28,8 +28,11 @@ const addUser = catchErrors(async (req, res, next) => {
   });
 });
 
-const getUsersList = async (req, res, next) => {
-  const arrayResults = await dbService.getUsers(req.query.query, req.query.size);
+const getUsersList = catchErrors(async (req, res, next) => {
+  const arrayResults = await dbService.getUsers(
+    req.query.query,
+    req.query.size
+  );
   const nextQuery = arrayResults[0];
   const snapshot = await arrayResults[1];
   const users = [];
@@ -47,7 +50,7 @@ const getUsersList = async (req, res, next) => {
       users: users,
     },
   });
-};
+});
 
 module.exports = {
   addUser,

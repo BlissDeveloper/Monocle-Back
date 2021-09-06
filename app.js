@@ -4,6 +4,7 @@ const routes = require("./routes/routes");
 const fileupload = require("express-fileupload");
 const cors = require("cors");
 const morgan = require("morgan");
+const cookieParser = require('cookie-parser')
 
 const globalErrorHandler = require("./controllers/errorController");
 const uploadMiddleware = require("./middlewares/uploadMiddleware");
@@ -15,10 +16,12 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(fileupload())
 app.use(uploadMiddleware);
+app.use(cookieParser())
 
 app.use(
   cors({
     origin: "*",
+    credentials: true
   })
 );
 

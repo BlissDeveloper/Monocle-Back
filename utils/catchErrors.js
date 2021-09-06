@@ -9,9 +9,10 @@ module.exports = catchErrors = (fn) => {
       next(new AppError(errorMessages.join(","), 400));
     } else {
       fn(req, res, next).catch((error) => {
-        if (error.code == "auth/id-token-revoked") {
+        if (error.code === "auth/id-token-revoked") {
           next(new AppError("Unauthorized.", 401));
-        } else {
+        }
+        else {
           next(error);
         }
       });

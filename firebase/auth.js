@@ -27,7 +27,7 @@ const forgotPass = (email) => {
 
 const signUp = (email, password) => {
   //accounts:signUp?key=[API_KEY]
-  console.log(axios);
+
   const path = "/accounts:signUp?key=" + API_KEY;
   return axios.post(path, {
     email: email,
@@ -36,8 +36,18 @@ const signUp = (email, password) => {
   });
 };
 
+const refreshToken = async (refreshToken) => {
+  const path = `/token?key=${API_KEY}`;
+  console.log(path);
+  return axios.post(path, {
+    refresh_token: refreshToken,
+    grant_type: "refresh_token",
+  });
+};
+
 module.exports = {
   signIn,
   forgotPass,
   signUp,
+  refreshToken,
 };

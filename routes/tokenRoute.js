@@ -3,6 +3,6 @@ const router = express.Router();
 
 const controller = require("../controllers/tokenController");
 
-router.post("/", controller.uidValidator, controller.fetchToken);
+router.get("/", controller.refreshToken);
 
 module.exports = router;

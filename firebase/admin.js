@@ -14,6 +14,8 @@ const verifyToken = async (token) => {
   return response;
 };
 
+
+
 module.exports = {
   generateToken,
   verifyToken,
